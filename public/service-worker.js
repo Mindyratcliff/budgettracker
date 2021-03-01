@@ -1,4 +1,10 @@
+import { openDB, deleteDB, wrap, unwrap } from 'idb';
+
+
+
 //Set up cache
+
+const { request } = require("express");
 
 const FILES_TO_CACHE = [
   "/",
@@ -64,5 +70,24 @@ self.addEventListener('activate', (event) => {
       );
     }
   });
+
+//Offline transactions
+
+async function doDatabaseStuff() {
+  
+};
+
+function createDB() {
+  idb.open('transactions', 1, function(upgradeDB) {
+    var store = upgradeDB.createObjectStore('expenses', {
+      keyPath: 'id'
+    });
+    store.put
+  });
+}
+
+self.addEventListener('fetch', (event) => {
+  if (event.request.)
+})
 
  
