@@ -3,12 +3,11 @@
 const FILES_TO_CACHE = [
   "/",
   "/index.html",
-  "/public/dist/",
-  "/models/transaction.js",
-  "/public/icons/icon-192x192.png",
-  "/public/icons/icon-512x512.png",
-  "/public/styles.css",
-  "/public/dist/bundle.js",
+  "/index.js",
+  "/icons/icon-192x192.png",
+  "/icons/icon-512x512.png",
+  "/styles.css",
+  "/dist/bundle.js",
   "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css",
 ];
 
@@ -65,4 +64,5 @@ self.addEventListener('activate', (event) => {
       );
     }
   });
-  
+
+ 

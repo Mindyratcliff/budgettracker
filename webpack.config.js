@@ -7,6 +7,7 @@ const config = {
   },
   output: {
     path: __dirname + "/public/dist",
+    publicPath: "/dist/",
     filename: "bundle.js",
   },
   mode: "development",
