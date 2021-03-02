@@ -1,13 +1,6 @@
 {
     "name": "Budget App",
     "short_name": "Budget",
-    "orientation": "portrait",
-    "display": "standalone",
-    "start_url": "/",
-    "description": "An application which allows you to track your budget online and offline.",
-    "background_color": "#ffffff",
-    "theme_color": "#ffffff",
-    "theme-color": "#ffffff",
     "icons": [
         {
             "src": "/icons/icon_512x512.png",
@@ -39,5 +32,12 @@
             "sizes": "96x96",
             "type": "image/png"
         }
-    ]
+    ],
+    "orientation": "portrait",
+    "display": "standalone",
+    "start_url": "/",
+    "description": "An application which allows you to track your budget online and offline.",
+    "background_color": "#ffffff",
+    "theme_color": "#ffffff",
+    "theme-color": "#ffffff"
 }
