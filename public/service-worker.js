@@ -1,10 +1,6 @@
-import { openDB, deleteDB, wrap, unwrap } from 'idb';
-
-
 
 //Set up cache
 
-const { request } = require("express");
 
 const FILES_TO_CACHE = [
   "/",
@@ -17,7 +13,7 @@ const FILES_TO_CACHE = [
   "https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css",
 ];
 
-const PRECACHE = "precache-v1";
+const PRECACHE = "precache";
 const RUNTIME = "runtime";
 
 //install
@@ -32,62 +28,83 @@ self.addEventListener("install", (event) => {
 
 //clean old caches
 
-self.addEventListener('activate', (event) => {
-    const currentCaches = [PRECACHE, RUNTIME];
-    event.waitUntil(
-      caches
-        .keys()
-        .then((cacheNames) => {
-          return cacheNames.filter((cacheName) => !currentCaches.includes(cacheName));
-        })
-        .then((cachesToDelete) => {
-          return Promise.all(
-            cachesToDelete.map((cacheToDelete) => {
-              return caches.delete(cacheToDelete);
-            })
-          );
-        })
-        .then(() => self.clients.claim())
+self.addEventListener("activate", (event) => {
+  const currentCaches = [PRECACHE, RUNTIME];
+  event.waitUntil(
+    caches
+      .keys()
+      .then((cacheNames) => {
+        return cacheNames.filter(
+          (cacheName) => !currentCaches.includes(cacheName)
+        );
+      })
+      .then((cachesToDelete) => {
+        return Promise.all(
+          cachesToDelete.map((cacheToDelete) => {
+            return caches.delete(cacheToDelete);
+          })
+        );
+      })
+      .then(() => self.clients.claim())
+  );
+});
+
+
+//Any req other than Get is not cached
+
+self.addEventListener("fetch", (event) => {
+  if (
+    event.request.method !== "GET" ||
+    !event.request.url.startsWith(self.location.origin)
+  ) {
+    event.respondWith(fetch(event.request)
+    .catch(() => savePostRequest(event.request)));
+    return;
+  }
+
+  //Get requests during run time
+
+    // use Cache for get requests when offline
+    event.respondWith(
+      caches.open(RUNTIME).then((cache) => {
+        return fetch(event.request)
+          .then((response) => {
+            cache.put(event.request, response.clone());
+            return response;
+          })
+          .catch(() => caches.match(event.request));
+      })
     );
-  });
-  
-  self.addEventListener('fetch', (event) => {
-    if (event.request.url.startsWith(self.location.origin)) {
-      event.respondWith(
-        caches.match(event.request).then((cachedResponse) => {
-          if (cachedResponse) {
-            return cachedResponse;
-          }
-  
-          return caches.open(RUNTIME).then((cache) => {
-            return fetch(event.request).then((response) => {
-              return cache.put(event.request, response.clone()).then(() => {
-                return response;
-              });
-            });
-          });
-        })
-      );
-    }
-  });
+    return;
+  }
+);
 
-//Offline transactions
+//Offline transactions - Post and Put requests
 
-async function doDatabaseStuff() {
-  
-};
+//Create the IndexedDB db
 
-function createDB() {
-  idb.open('transactions', 1, function(upgradeDB) {
-    var store = upgradeDB.createObjectStore('expenses', {
-      keyPath: 'id'
-    });
-    store.put
-  });
+async function dbActions() {
+  const db = await openDB("Transactions", 1, {
+    upgrade(db, oldVersion, newVersion, transaction) {
+      db.createObjectStore("expenses");
+    },
+  }); 
+  return db;
 }
+self.addEventListener("fetch", (event) => {
+  if (event.request.method == "POST" || event.request.method == "PUT") {
+    event.respondWith(
+      fetch(event.request).catch(function (err) {
+        console.log("meow");
+      })
+    );
+    return;
+  }
+});
 
-self.addEventListener('fetch', (event) => {
-  if (event.request.)
-})
-
- 
+function savePostRequest(request) {
+const db = dbActions();
+const transaction = db.transaction(["expenses"], "readwrite");
+const store = transaction.objectStore('expenses');
+store.add(request.url);
+}
