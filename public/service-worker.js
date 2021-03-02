@@ -51,31 +51,3 @@ self.addEventListener("activate", (event) => {
 });
 
 
-//Any req other than Get is not cached
-
-self.addEventListener("fetch", (event) => {
-  if (
-    event.request.method !== "GET" ||
-    !event.request.url.startsWith(self.location.origin)
-  ) {
-    event.respondWith(fetch(event.request)
-    .catch(() => savePostRequest(event.request)));
-    return;
-  }
-
-  //Get requests during run time
-
-    // use Cache for get requests when offline
-    event.respondWith(
-      caches.open(RUNTIME).then((cache) => {
-        return fetch(event.request)
-          .then((response) => {
-            cache.put(event.request, response.clone());
-            return response;
-          })
-          .catch(() => caches.match(event.request));
-      })
-    );
-    return;
-  }
-);
