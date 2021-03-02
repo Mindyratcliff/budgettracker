@@ -6,6 +6,7 @@ const FILES_TO_CACHE = [
   "/",
   "/index.html",
   "/index.js",
+  "/db.js",
   "/icons/icon-192x192.png",
   "/icons/icon-512x512.png",
   "/styles.css",
@@ -78,34 +79,3 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 );
-
-//Offline transactions - Post and Put requests
-
-//Create the IndexedDB db
-
-async function dbActions() {
-  const db = await openDB("Transactions", 1, {
-    upgrade(db, oldVersion, newVersion, transaction) {
-      db.createObjectStore("expenses");
-    },
-  }); 
-  return db;
-}
-self.addEventListener("fetch", (event) => {
-  if (event.request.method == "POST" || event.request.method == "PUT") {
-    event.respondWith(
-      fetch(event.request).catch(function (err) {
-        console.log("meow");
-      })
-    );
-    return;
-  }
-});
-
-function savePostRequest(request) {
-const db = dbActions();
-const transaction = db.transaction(["expenses"], "readwrite");
-const store = transaction.objectStore('expenses');
-store.add(request.url);
-}
-
