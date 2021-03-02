@@ -3,7 +3,7 @@
 
  ![JavaScript](https://img.shields.io/github/languages/top/Mindyratcliff/budgettracker)  ![Node](https://img.shields.io/badge/dependency-node-brightgreen) ![WomeninTech](https://img.shields.io/badge/womanmade-100%25-ff69b4)
 
- 
+ ![ScreenShot](budgetapp.png)
 
 This is a Progressive Web Application which allows users to track expenses and deposits online and offline. Webpack and Webpack PWA manifest are used to create the manifest, and IndexedDB is used for the offline transactions when the MongoDB/Mongoose database is not available. 
 
@@ -21,7 +21,7 @@ This is a Progressive Web Application which allows users to track expenses and d
 6.) [License](#license)
 
 ## Usage
-
+ The application may be accessed on Heroku at [Budget](https://ratcliffbudgettracker.herokuapp.com/)
 
 To use this:
 
