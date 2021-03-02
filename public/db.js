@@ -55,7 +55,7 @@ function checkDatabase() {
        
         const transaction = db.transaction(["expenses"], "readwrite");
 
-        // access your pending object store
+        
         const store = transaction.objectStore("expenses");
 
         // clear all items in your store
