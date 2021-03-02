@@ -108,3 +108,4 @@ const transaction = db.transaction(["expenses"], "readwrite");
 const store = transaction.objectStore('expenses');
 store.add(request.url);
 }
+
